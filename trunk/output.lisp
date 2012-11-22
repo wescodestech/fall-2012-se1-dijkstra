@@ -102,8 +102,16 @@
       )
     )
   )
-  
-  (defun getHTML (dates sums)
+  (defun tickerNiceString (tickers)
+    (if (consp (cdr tickers))
+      (concatenate 'string (car tickers) ", " (tickerNiceString (cdr tickers)))
+      (car tickers)
+    )
+  )
+  (defun dateNiceString (dates)
+    (concatenate 'string (rat->str (first dates) 0) " - " (rat->str (car(last dates)) 0) )
+  )
+  (defun getHTML (dates sums tickers)
     (concatenate 'string 
       "<html><head>
        <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
@@ -115,7 +123,7 @@
                  "[" "['x','y','regression']," (generateData dates sums) "]"     
            ");
            var options = {
-             title: \"Pi / 4 Using the Monte Carlo method\"
+             title: \"Stock Analysis For: " (tickerNiceString tickers) " Between " (dateNiceString dates) "\"
            };
 
            var chart = new google.visualization.LineChart(document.getElementById(\"chart_div\"));
@@ -132,20 +140,21 @@
 (defun modify-file (str)
    (list (chrs->str (str->chrs str))))
 
-(defun rtw (dates sums f-in f-out state)
-  (mv-let (input-as-string error-open state) (file->string f-in state)
-     (if error-open
-         (mv error-open state)
-         (mv-let (error-close state)
-                 (string-list->file f-out
-                                    (modify-file (getHTML dates sums))
-                                    state)
-            (if error-close
-                (mv error-close state)
-                (mv (string-append "input file: "
-                     (string-append f-in
-                      (string-append ", output file: " f-out)))
-                    state))))))
+  (defun writeToFile (dates sums tickers f-out state)
+    (mv-let (error-close state)
+      (string-list->file 
+        f-out
+        (modify-file (getHTML dates sums tickers))
+        state
+      )
+      (if error-close
+        (mv error-close state)
+        (mv  (string-append ", output file: " f-out)
+            state
+        )     
+      )
+    )
+  )
 
   (defun tickerString (tickers)
     (if (consp (cdr tickers)) 
@@ -175,16 +184,12 @@
           ;then change values into a list of dates and a list of sums (xs and ys)
           (let* ((dates (firsts values)) (sums (seconds values)) )
             ;get the linear regression data (in JSON form)
-            (rtw dates sums "in.txt" (getName tickers dates) state)
+            (writeToFile dates sums tickers (getName tickers dates) state)
           )
         )
     )
   )
 
-
-
-
-
-  ;(getName '("test1" "test2" "test3") '(1 2 3 4 5))
-  (outputStockData (list ( list (list '(1 10) '(2 11) '(3 15) '(4 1)) (list "GOOG" "YHOO")) ( list (list '(4 5) '(6 10) '(9 5)) (list "GOOG" "YHOO")))  )
+  ; output these two data items for testing
+  (outputStockData (list ( list (list '(20121115 10) '(20121116 15) '(20121117 50) '(20121118 1)) (list "GOOG" "FB" "MSFT")) ( list (list '(20121112 20) '(20121113 70) '(20121114 40)) (list "AMZN" "ZNGA")))  )
   
