@@ -102,7 +102,63 @@
       )
     )
   )
+  
+  (defun getHTML (dates sums)
+    (concatenate 'string 
+      "<html><head>
+       <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
+       <script type=\"text/javascript\">
+         google.load(\"visualization\", \"1\", {packages:[\"corechart\"]});
+         google.setOnLoadCallback(drawChart);
+         function drawChart() {
+           var data = google.visualization.arrayToDataTable("
+                 "[" "['x','y','regression']," (generateData dates sums) "]"     
+           ");
+           var options = {
+             title: \"Pi / 4 Using the Monte Carlo method\"
+           };
 
+           var chart = new google.visualization.LineChart(document.getElementById(\"chart_div\"));
+           chart.draw(data, options);
+         }
+       </script>
+     </head><body>
+       <div id=\"chart_div\" style=\"width: 900px; height: 500px;\"></div>
+     </body>
+   </html>"
+    )
+  )
+
+(defun modify-file (str)
+   (list (chrs->str (str->chrs str))))
+
+(defun rtw (dates sums f-in f-out state)
+  (mv-let (input-as-string error-open state) (file->string f-in state)
+     (if error-open
+         (mv error-open state)
+         (mv-let (error-close state)
+                 (string-list->file f-out
+                                    (modify-file (getHTML dates sums))
+                                    state)
+            (if error-close
+                (mv error-close state)
+                (mv (string-append "input file: "
+                     (string-append f-in
+                      (string-append ", output file: " f-out)))
+                    state))))))
+
+  (defun tickerString (tickers)
+    (if (consp (cdr tickers)) 
+      (concatenate 'string (car tickers) "_" (tickerString (cdr tickers)))
+      (car tickers)
+    )
+  )
+  (defun dateString (dates)
+    (concatenate 'string (rat->str (first dates) 0) "_" (rat->str (car(last dates)) 0) )
+  )
+  (defun getName (tickers dates)
+    (concatenate 'string (dateString dates) "_" (tickerString tickers) ".html")
+  )
   (defun outputStockData (data)
     (if (consp (cdr data)) 
 
@@ -113,16 +169,22 @@
         (cons (outputStockData (list(car data))) (outputStockData (cdr data))) 
 
         ; Base Case - called once for every recursive case
-        ;first take the car, because we don't need the names
-        (let* ((values (car (car data))))
-          ;then change that into a list of dates and a list of sums (xs and ys)
-          (let* ((dates (firsts values)) (sums (seconds values)))
+        ; first take the car, which is the dates and sums
+        ; then take the cdr, which is the ticker symbols
+        (let* ((values (car (car data))) (tickers (car (cdr (car data)))) )
+          ;then change values into a list of dates and a list of sums (xs and ys)
+          (let* ((dates (firsts values)) (sums (seconds values)) )
             ;get the linear regression data (in JSON form)
-            (generateData dates sums) 
+            (rtw dates sums "in.txt" (getName tickers dates) state)
           )
         )
     )
   )
-  
-  (outputStockData (list ( list (list '(1 5) '(2 10) '(3 5)) (list "GOOG" "YHOO")) ( list (list '(1 5) '(2 10) '(3 5)) (list "GOOG" "YHOO")))  )
+
+
+
+
+
+  ;(getName '("test1" "test2" "test3") '(1 2 3 4 5))
+  (outputStockData (list ( list (list '(1 10) '(2 11) '(3 15) '(4 1)) (list "GOOG" "YHOO")) ( list (list '(4 5) '(6 10) '(9 5)) (list "GOOG" "YHOO")))  )
   
