@@ -10,23 +10,28 @@
   (include-book "io-utilities" :dir :teachpacks)
   (include-book "list-utilities" :dir :teachpacks)
 
-  
-  ; private
+  ; take the sum of a list
   (defun sum (xs)
-  (if (consp (cdr xs)) 
-      (+ (car xs) (sum (cdr xs)))
-      (car xs)
+    (if (consp (cdr xs)) 
+        (+ (car xs) (sum (cdr xs)))
+        (car xs)
+    )
   )
-  )
+  
+  ; take the average of a list 
   (defun avg (xs)
     (/ (sum xs) (len xs))
   )
+  
+  ; add to every element in a list
   (defun vector+scalar (xs x)
     (if (consp (cdr xs))
       (cons (+ x (car xs)) (vector+scalar (cdr xs) x)) 
       (list (+ x (car xs)))
     )
   )
+  
+  ; combine two lists by multiplication of their elements
   (defun vector*vector (xs ys)
     (if (consp (cdr xs))
         (cons (* (car xs) (car ys)) (vector*vector (cdr xs) (cdr ys)) )
@@ -34,8 +39,7 @@
     )
   )
 
-  ; list containing the differences between each 
-  ; single point and the average of a list
+  ; take the differences between each element and the average of the list
   (defun differences (xs)
     (if (consp (cdr xs))
       (cons (-(car xs) (avg xs)) (differences (cdr xs))) 
@@ -43,7 +47,7 @@
     )
   )
 
-  ; Variance
+  ; take the variance of the list
   (defun xVar (xs)
     (let* ((ds (differences xs)))
       (let* ((sds (vector*vector ds ds)))
@@ -60,27 +64,37 @@
       )
     )
   )
+  
+  ; get y for ax + b
   (defun getY (x a b)
     (+(* a x) b)
   )
+  
+  ; get a set of ys for each x in xs
   (defun getYs (xs a b)
     (if (consp (cdr xs))
         (cons (getY(car xs) a b) (getYs (cdr xs) a b)) 
         (list (getY (car xs) a b))
     )
   )
-  (defun combine (xs ys zs)
+  
+  ; combine three lists of size k into a JSON array of k triples
+  (defun JSONcombine (xs ys zs)
     (if (consp (cdr xs)) 
         (concatenate 'string (concatenate 'string "[" (rat->str(car xs) 2) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (combine (cdr xs) (cdr ys) (cdr zs))  ) 
         (concatenate 'string "[" (rat->str (car xs) 2) "," (rat->str (car ys) 2) "," (rat->str (car zs) 2) "]" ) 
     )
   )
+  
+  ; given a list of tuples, take all first elements
   (defun firsts (tups)
     (if (consp (cdr tups))
         (cons (first (car tups)) (firsts (cdr tups)))
         (list (first (car tups)))
     )
   )
+  
+  ; given a list of tuples, take all second elements
   (defun seconds (tups)
     (if (consp (cdr tups))
         (cons (second (car tups)) (seconds (cdr tups)))
@@ -88,12 +102,13 @@
     )
   )
 
-  
-  ; defuns
+  ; perform linear regression on the sum as a function of the date,
+  ; given a list of dates and a list of sums. Output a JSON array of
+  ; triples of the format [date,sum, linear approximation of sum]
   (defun generateData (dates sums)
     ; do the linear regression to get a and b
-    ; then use algebra to get a list of regression values at every date (getYs)
-    ; then combine dates sums and regression values into a list of triples as a string
+    ; use algebra to get a list of approximate values at every date
+    ; format as a JSON array
     (let* ((xAvg (avg dates)) (yAvg (avg sums)))
       (let* ((b (/ (r dates sums) (xVar dates))))
         (let* ((a (- yAvg (* b xAvg))))
@@ -102,15 +117,21 @@
       )
     )
   )
-  (defun tickerNiceString (tickers)
-    (if (consp (cdr tickers))
-      (concatenate 'string (car tickers) ", " (tickerNiceString (cdr tickers)))
+
+  ; concatenate the ticker symbols using some delimiter
+  (defun tickerString (tickers delim)
+    (if (consp (cdr tickers)) 
+      (concatenate 'string (car tickers) delim (tickerString (cdr tickers) delim))
       (car tickers)
     )
   )
-  (defun dateNiceString (dates)
-    (concatenate 'string (rat->str (first dates) 0) " - " (rat->str (car(last dates)) 0) )
+  
+  ; concatenate the first and last dates using some delimiter
+  (defun dateString (dates delim)
+    (concatenate 'string (rat->str (first dates) 0) delim (rat->str (car(last dates)) 0) )
   )
+  
+  ; pass the raw data to generateData and wrap the results with HTML
   (defun getHTML (dates sums tickers)
     (concatenate 'string 
       "<html><head>
@@ -123,7 +144,7 @@
                  "[" "['x','y','regression']," (generateData dates sums) "]"     
            ");
            var options = {
-             title: \"Stock Analysis For: " (tickerNiceString tickers) " Between " (dateNiceString dates) "\"
+             title: \"Stock Analysis For: " (tickerString tickers ", ") " Between " (dateString dates " - ") "\"
            };
 
            var chart = new google.visualization.LineChart(document.getElementById(\"chart_div\"));
@@ -137,14 +158,12 @@
     )
   )
 
-(defun modify-file (str)
-   (list (chrs->str (str->chrs str))))
-
+  ; pass the raw data to generateHTML and write the results to a file
   (defun writeToFile (dates sums tickers f-out state)
     (mv-let (error-close state)
       (string-list->file 
         f-out
-        (modify-file (getHTML dates sums tickers))
+        (list (getHTML dates sums tickers))
         state
       )
       (if error-close
@@ -156,18 +175,12 @@
     )
   )
 
-  (defun tickerString (tickers)
-    (if (consp (cdr tickers)) 
-      (concatenate 'string (car tickers) "_" (tickerString (cdr tickers)))
-      (car tickers)
-    )
+  ; generate a unique file name based on the data
+  (defun getFileName (tickers dates)
+    (concatenate 'string (dateString dates "_") "_" (tickerString tickers "_") ".html")
   )
-  (defun dateString (dates)
-    (concatenate 'string (rat->str (first dates) 0) "_" (rat->str (car(last dates)) 0) )
-  )
-  (defun getName (tickers dates)
-    (concatenate 'string (dateString dates) "_" (tickerString tickers) ".html")
-  )
+  
+  ; take the raw data and output HTML files
   (defun outputStockData (data)
     (if (consp (cdr data)) 
 
@@ -184,7 +197,7 @@
           ;then change values into a list of dates and a list of sums (xs and ys)
           (let* ((dates (firsts values)) (sums (seconds values)) )
             ;get the linear regression data (in JSON form)
-            (writeToFile dates sums tickers (getName tickers dates) state)
+            (writeToFile dates sums tickers (getFileName tickers dates) state)
           )
         )
     )
