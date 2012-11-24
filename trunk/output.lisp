@@ -81,7 +81,7 @@
   ; combine three lists of size k into a JSON array of k triples
   (defun JSONcombine (xs ys zs)
     (if (consp (cdr xs)) 
-        (concatenate 'string (concatenate 'string "[" (rat->str(car xs) 2) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (combine (cdr xs) (cdr ys) (cdr zs))  ) 
+        (concatenate 'string (concatenate 'string "[" (rat->str(car xs) 2) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (JSONcombine (cdr xs) (cdr ys) (cdr zs))  ) 
         (concatenate 'string "[" (rat->str (car xs) 2) "," (rat->str (car ys) 2) "," (rat->str (car zs) 2) "]" ) 
     )
   )
@@ -102,6 +102,7 @@
     )
   )
 
+  
   ; perform linear regression on the sum as a function of the date,
   ; given a list of dates and a list of sums. Output a JSON array of
   ; triples of the format [date,sum, linear approximation of sum]
@@ -112,7 +113,7 @@
     (let* ((xAvg (avg dates)) (yAvg (avg sums)))
       (let* ((b (/ (r dates sums) (xVar dates))))
         (let* ((a (- yAvg (* b xAvg))))
-         (combine dates sums (getYs dates b a))
+         (JSONcombine dates sums (getYs dates b a))
         )
       )
     )
