@@ -1,4 +1,5 @@
 (include-book "io-utilities" :dir :teachpacks)
+(include-book "list-utilities" :dir :teachpacks)
 
 ; (extractXMLTag xml tag)
 ; Extracts the contents of an XML tags (all the data that is contained between
@@ -42,6 +43,24 @@
         (cons (coerce (car record) 'string) (extractStockRecords(cdr record))))))
 
 (defun read-data (file state)
-    (mv-let (input-text error-open state)
-            (file->string file state)
-            input-text))
+  (mv-let (text error state) (file->string file state)
+          (if error
+              (mv error state)
+              (mv (len (str->chrs text)) state))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
