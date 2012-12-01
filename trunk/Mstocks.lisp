@@ -7,6 +7,7 @@
 |#
 ;(require "Istocks.lisp")
 (include-book "avl-rational-keys" :dir :teachpacks)
+(include-book "io-utilities" :dir :teachpacks)
 (include-book "Mxml-reader")
 
 (defun getStockData () t)
@@ -34,6 +35,11 @@
                                 (second child)))
       (avl-insert parent (first child) (second child))))
 
+(defun hash-key (key)
+  t)
+
+(defun dehash-key (key)
+  t)
 ; Commented out for now to get module functional
 #|(module Mstocks
   
