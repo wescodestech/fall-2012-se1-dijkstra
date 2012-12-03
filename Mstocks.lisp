@@ -12,9 +12,6 @@
 
 (defun getStockData () t)
 
-(defun readStockData (hist)
-  t)
-
 ; (populateTree parent child)
 ; This function will insert data into the tree where it can locate a
 ; key-value pair and correctly construct a subtree for that node, given
@@ -28,18 +25,13 @@
 ; child  - The data structure that will be inserted into the tree in 
 ;          the form (td (tk op)) where td is the target date, tk is 
 ;          the token a stock represents and op is the opening price.
-(defun populateTree(parent child)
-  (if (occurs-in-tree? (first child) parent)
-      (avl-insert (avl-delete parent (first child)) (first child) 
-                  (populateTree (avl-retrieve parent (first child)) 
-                                (second child)))
-      (avl-insert parent (first child) (second child))))
+(defun populateTree(parent node)
+  (if (occurs-in-tree? (car node) parent)
+      (let* ((found (avl-retrieve parent (car node))))
+        (avl-insert (avl-delete parent (car node)) (car node)
+                    (cons (cadr found) (list (cons (cadr node) (caddr node))))))
+      (avl-insert parent (first node) (cons (list (cadr node) (caddr node)) nil))))
 
-(defun hash-key (key)
-  t)
-
-(defun dehash-key (key)
-  t)
 ; Commented out for now to get module functional
 #|(module Mstocks
   
