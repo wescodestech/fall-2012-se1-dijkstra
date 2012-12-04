@@ -1,3 +1,7 @@
+;; The first four lines of this file were added by Dracula.
+;; They tell DrScheme that this is a Dracula Modular ACL2 program.
+;; Leave these lines unchanged so that DrScheme can properly load this file.
+#reader(planet "reader.rkt" ("cce" "dracula.plt") "modular" "lang")
 #|This line is 75 characters long.---------------------------------------|#
 #|tImpl: Stock History Analysis 
   Mdriver.lisp
@@ -6,11 +10,16 @@
   Team Dijkstra
 |#
 (require "Idriver.lisp")
+(require "MOutput.lisp")
+(require "Mrequests.lisp")
+(require "Istocks.lisp")
 
 (module Mdriver-private
   (include-book "avl-rational-keys" :dir :teachpacks)
   (include-book "io-utilities" :dir :teachpacks)
-  
+  (import IOutput)
+  (import Irequests)
+  (import Istocks)
   
   ; (isPresent tks sr)
   ; Verifies if the token for the stock record is present in the list of
@@ -64,8 +73,8 @@
   (defun mapData (stocks requests)
     (if (equal nil (car requests))
         nil
-        (let* ((req (car requests))
-               (lin (avl-flatten stocks)))
+        (let* ((req (getRequests requests))
+               (lin (avl-flatten (getStockData))))
           (outputStockData (cons (list (getStockValues lin req) (caddr req)) 
                 (mapData stocks (cdr requests)))))))
   
@@ -73,6 +82,6 @@
   (export Idriver))
 
 (link Mdriver
-      (import)
+      (import IOutput Irequests Istocks)
       (export Idriver)
       (Mdriver-private))

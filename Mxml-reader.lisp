@@ -12,7 +12,7 @@
 
 (require "Ixml-reader.lisp")
 
-(module Mxml-reader
+(module Mxml-reader-private
   (include-book "io-utilities" :dir :teachpacks)
 
   ; (extractXMLTag xml tag)
@@ -78,4 +78,4 @@
 (link Mxml-reader
       (import)
       (export Ixml-reader)
-      (Mxml-reader))
+      (Mxml-reader-private))
