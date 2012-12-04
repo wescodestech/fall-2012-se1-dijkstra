@@ -6,3 +6,5 @@
   Team Dijkstra
 |#
 
+(interface Istocks
+	(sig ))
