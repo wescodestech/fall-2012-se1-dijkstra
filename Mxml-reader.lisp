@@ -1,26 +1,41 @@
-(include-book "io-utilities" :dir :teachpacks)
+;; The first four lines of this file were added by Dracula.
+;; They tell DrScheme that this is a Dracula Modular ACL2 program.
+;; Leave these lines unchanged so that DrScheme can properly load this file.
+#reader(planet "reader.rkt" ("cce" "dracula.plt") "modular" "lang")
+#|This line is 75 characters long.---------------------------------------|#
+#|tImpl: Stock History Analysis 
+  Mxml-reader.lisp
+  Reads and parses the xml data file.
+  Date: December 6th, 2012
+  Team Dijkstra
+|#
 
-; (extractXMLTag xml tag)
-; Extracts the contents of an XML tags (all the data that is contained 
-; between the tags)
-;
-; xml - the string that contains the RAW XML data
-; tag - the tag that will be extracted from the XML.
-;
-; The data between the opening <TAG> and closing </TAG> is returned as a 
-; char list.  The data that occurs after the </TAG> is located, is 
-; returned as a string unparsed. The return format for this function is 
-; (parsed_char_array . the_rest_as_string)
-(defun extractXMLTag (xml tag)
-  ; Covert the XML string into a character list
-  (let* ((xmlCharacters (coerce xml 'list)))
-    ; See if we are working with a tag
-    (if (equal (car xmlCharacters) #\<)
+(require "Ixml-reader.lisp")
+
+(module Mxml-reader
+  (include-book "io-utilities" :dir :teachpacks)
+
+  ; (extractXMLTag xml tag)
+  ; Extracts the contents of an XML tags (all the data that is contained 
+  ; between the tags)
+  ;
+  ; xml - the string that contains the RAW XML data
+  ; tag - the tag that will be extracted from the XML.
+  ;
+  ; The data between the opening <TAG> and closing </TAG> is returned as a 
+  ; char list.  The data that occurs after the </TAG> is located, is 
+  ; returned as a string unparsed. The return format for this function is 
+  ; (parsed_char_array . the_rest_as_string)
+  (defun extractXMLTag (xml tag)
+    ; Covert the XML string into a character list
+    (let* ((xmlCharacters (coerce xml 'list)))
+      ; See if we are working with a tag
+      (if (equal (car xmlCharacters) #\<)
         ; Is it a closing tag?
         (if (equal (cadr xmlCharacters) #\/)
-            ; Is it the closing tag of our tag we are looking for?
-            (if (equal (coerce (list (caddr xmlCharacters) 
-                                     (cadddr xmlCharacters)) 'string) tag)
+          ; Is it the closing tag of our tag we are looking for?
+          (if (equal (coerce (list (caddr xmlCharacters) 
+                     (cadddr xmlCharacters)) 'string) tag)
                 ; Ingore the rest of the tag
                 (let* ((therest (cdr (cddddr xmlCharacters))))
                   ; Done processing XML!
@@ -50,9 +65,17 @@
         
         (if (endp xmlCharacters)
             (cons nil nil); Nothing to see here!
-            (let* ((rec (extractXMLTag (coerce (cdr xmlCharacters) 'string) tag)))
+            (let* ((rec (extractXMLTag 
+                         (coerce (cdr xmlCharacters) 'string) tag)))
               (if (or (equal (car xmlCharacters) #\Newline)
                     (equal (car xmlCharacters) #\Tab))
                   ; Ignore the tab/newline
                   (cons (car rec) (cdr rec))
-                  (cons (cons (car xmlCharacters) (car rec)) (cdr rec)))))))) 
+                  (cons (cons (car xmlCharacters) (car rec)) 
+                        (cdr rec))))))))
+  (export Ixml-reader))
+
+(link Mxml-reader
+      (import)
+      (export Ixml-reader)
+      (Mxml-reader))

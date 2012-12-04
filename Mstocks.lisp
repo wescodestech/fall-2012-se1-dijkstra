@@ -1,3 +1,7 @@
+;; The first four lines of this file were added by Dracula.
+;; They tell DrScheme that this is a Dracula Modular ACL2 program.
+;; Leave these lines unchanged so that DrScheme can properly load this file.
+#reader(planet "reader.rkt" ("cce" "dracula.plt") "modular" "lang")
 #|This line is 75 characters long.---------------------------------------|#
 #|tImpl: Stock History Analysis 
   Mstocks.lisp
@@ -6,11 +10,13 @@
   Team Dijkstra
 |#
 (require "Istocks.lisp")
+(require "Ixml-reader.lisp")
 
-(module Mstocks
+(module Mstocks-public
+  (import Ixml-reader)
+  
   (include-book "avl-rational-keys" :dir :teachpacks)
   (include-book "io-utilities" :dir :teachpacks)
-  (include-book "Mxml-reader")
 
   ; (populateTree parent child)
   ; This function will insert data into the tree where it can locate a
@@ -70,6 +76,6 @@
   (export Istocks))
 
 (link Mstocks
-      (import)
+      (import Ixml-reader)
       (export Istocks)
-      (Mstocks))
+      (Mstocks-public))
