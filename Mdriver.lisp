@@ -9,13 +9,7 @@
 
 #|(module Mdriver-private |#
   (include-book "avl-rational-keys" :dir :teachpacks)
-  
-  (defun mapData (stocks requests)
-    (if (equal nil (car requests))
-        nil
-        (let* ((req (car requests))
-               (lin (avl-flatten stocks)))
-          nil)))
+
   
   ; (isPresent tks sr)
   ; Verifies if the token for the stock record is present in the list of
@@ -50,6 +44,12 @@
             (calcValue tks (cdr srs) total_value))))
         
   
+  ; (getStockValues flattented_tree request)
+  ; Returns the calculated values of the stock data for
+  ; one specified request 
+  ;
+  ; flattened_tree -  the tree of stock data
+  ; request -  The individual request for a record
   (defun getStockValues (flattened_tree request)
     (if (equal nil (car flattened_tree))
         nil
@@ -62,7 +62,21 @@
           (if (and (<= sd date) (>= ed date))
               (calcValue tks stocks 0)
               (getStockValues (cdr flattened_tree) request)))))
+  
+    (defun runRequests (flattened_tree request_list)
+    (if (consp (request_list))
+        (cons (getStockValues flattened_tree (car request_list))
+              (runRequests flattened_tree (cdr request_list)))
+        (outputStockData (list (getStockValues flattened_tree (car request_list))))))
+  
+  (defun mapData (stocks requests)
+    (if (equal nil (car requests))
+        nil
+        (let* ((req (requests))
+               (lin (avl-flatten stocks)))
+          (runRequests lin req))))
         
+  
         
 #|  (export Idriver))
 
