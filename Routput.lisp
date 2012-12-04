@@ -22,4 +22,4 @@
       (export Ioutput)
       (Moutput))
 (invoke Routput)
-(outputStockData (list ( list (list '(20121115 10) '(20121116 15) '(20121117 50) '(20121118 1)) (list "GOOG" "FB" "MSFT")) ( list (list '(20121112 20) '(20121113 70) '(20121114 40)) (list "AMZN" "ZNGA")))  )
+(outputStockData (list ( list (list '(20121115 10) '(20121116 15) '(20121117 50) '(20121118 1)) (list "GOOG" "FB" "MSFT")) ( list (list '(20120712 20) '(20120813 70) '(20121007 40)) (list "AMZN" "ZNGA")))  )
