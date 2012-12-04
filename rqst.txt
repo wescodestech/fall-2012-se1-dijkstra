@@ -1,0 +1,12 @@
+<ar>
+    <sd>20090821</sd>
+    <ed>20091001</ed>
+    <tk>AA</tk>
+    <tk>AAPL</tk>
+</ar>
+<ar>
+    <sd>20100321</sd>
+    <ed>20100901</ed>
+    <tk>GOOG</tk>
+    <tk>YHOO</tk>
+</ar>
