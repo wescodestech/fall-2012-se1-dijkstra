@@ -59,7 +59,7 @@
           (populateTree (readStockData (cdr sr)) 
                         (list (str->rat (coerce (car td) 'string)) 
                               (coerce (car tk) 'string) 
-                              (str->rat (coerce (car op) 'string)))))))
+                              (str->rat (coerce (car cp) 'string)))))))
   
   ; (getStockData)
   ; Acquires the stock data in tree formate where TD is the key and 
