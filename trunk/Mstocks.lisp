@@ -70,7 +70,7 @@
   ; notation for parsing purposes.
   (defun getStockData () 
     (mv-let (input-text error-open state)
-            (file->string "short_hist.txt" state)
+            (file->string "hist.txt" state)
             (readStockData input-text)))
   
   (export Istocks))
