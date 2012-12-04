@@ -77,12 +77,22 @@
         (list (getY (car xs) a b))
     )
   )
-  
+
+  (defun googleDate (date)
+    (let* ((yd (break-at-nth 4 (str->chrs date))))
+      (let* ((md (break-at-nth 2 (second yd))))
+        (let* ((y (car yd)) (m (car md)) (d (second md)))
+          (concatenate 'string "new Date(" (chrs->str y) ", " (chrs->str m) ", " (chrs->str d) ")")
+        )
+      )
+    )
+  ) 
+
   ; combine three lists of size k into a JSON array of k triples
   (defun JSONcombine (xs ys zs)
     (if (consp (cdr xs)) 
-        (concatenate 'string (concatenate 'string "[" (rat->str(car xs) 2) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (JSONcombine (cdr xs) (cdr ys) (cdr zs))  ) 
-        (concatenate 'string "[" (rat->str (car xs) 2) "," (rat->str (car ys) 2) "," (rat->str (car zs) 2) "]" ) 
+        (concatenate 'string (concatenate 'string "[" (googleDate (rat->str(car xs) 2)) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (JSONcombine (cdr xs) (cdr ys) (cdr zs))  ) 
+        (concatenate 'string "[" (googleDate (rat->str (car xs) 2)) "," (rat->str (car ys) 2) "," (rat->str (car zs) 2) "]" ) 
     )
   )
   
@@ -101,7 +111,6 @@
         (list (second (car tups)))
     )
   )
-
   
   ; perform linear regression on the sum as a function of the date,
   ; given a list of dates and a list of sums. Output a JSON array of
@@ -135,27 +144,28 @@
   ; pass the raw data to generateData and wrap the results with HTML
   (defun getHTML (dates sums tickers)
     (concatenate 'string 
-      "<html><head>
-       <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
-       <script type=\"text/javascript\">
-         google.load(\"visualization\", \"1\", {packages:[\"corechart\"]});
-         google.setOnLoadCallback(drawChart);
-         function drawChart() {
-           var data = google.visualization.arrayToDataTable("
-                 "[" "['x','y','regression']," (generateData dates sums) "]"     
-           ");
-           var options = {
-             title: \"Stock Analysis For: " (tickerString tickers ", ") " Between " (dateString dates " - ") "\"
-           };
-
-           var chart = new google.visualization.LineChart(document.getElementById(\"chart_div\"));
-           chart.draw(data, options);
-         }
-       </script>
-     </head><body>
-       <div id=\"chart_div\" style=\"width: 900px; height: 500px;\"></div>
-     </body>
-   </html>"
+      "<html>
+         <head>
+           <script type='text/javascript' src='http://www.google.com/jsapi'></script>
+           <script type='text/javascript'>
+             google.load('visualization', '1', {'packages':['annotatedtimeline']});
+             google.setOnLoadCallback(drawChart);
+             function drawChart() {
+               var data = new google.visualization.DataTable();
+               data.addColumn('date', 'Date');
+               data.addColumn('number', 'Sum Value');
+               data.addColumn('number', 'Trend Value');
+               data.addRows([" (generateData dates sums) "]);
+               var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+               chart.draw(data, {displayAnnotations: true});
+             }
+           </script>
+         </head>
+         <body>
+           <h1>Linear Regression Analysis</h1><h2>" (tickerString tickers "<br>") "</h2>
+           <div id='chart_div' style='width: 800px; height: 400px;'></div>
+         </body>
+       </html>"
     )
   )
 
@@ -203,7 +213,3 @@
         )
     )
   )
-
-  ; output these two data items for testing
-  (outputStockData (list ( list (list '(20121115 10) '(20121116 15) '(20121117 50) '(20121118 1)) (list "GOOG" "FB" "MSFT")) ( list (list '(20121112 20) '(20121113 70) '(20121114 40)) (list "AMZN" "ZNGA")))  )
-  
