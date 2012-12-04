@@ -73,10 +73,13 @@
   (defun mapData (stocks requests)
     (if (equal nil (car requests))
         nil
-        (let* ((req (getRequests requests))
-               (lin (avl-flatten (getStockData))))
+        (let* ((req requests)
+               (lin (avl-flatten stocks)))
           (outputStockData (cons (list (getStockValues lin req) (caddr req)) 
                 (mapData stocks (cdr requests)))))))
+  
+  (defun RunProgram (RqstFile)
+    (mapData (getStockData) (getRequests RqstFile)))
   
   
   (export Idriver))
