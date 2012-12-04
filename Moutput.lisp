@@ -223,7 +223,10 @@
           ;then change values into a list of dates and a list of sums (xs and ys)
           (let* ((dates (firsts values)) (sums (seconds values)) )
             ;get the linear regression data (in JSON form)
-            (writeToFile dates sums tickers (getFileName tickers dates) state)
+            (if (equal values nil) 
+              nil
+              (writeToFile dates sums tickers (getFileName tickers dates) state)
+            )
           )
         )
     )
