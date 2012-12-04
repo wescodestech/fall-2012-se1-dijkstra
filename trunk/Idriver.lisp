@@ -7,4 +7,7 @@
 |#
 
 (interface Idriver
-  (sig ))
+  (sig isDriver (tks sr))
+  (sig calcValue (tks srs total_value))
+  (sig getStockValues (flattened_tree request))
+  (sig mapData (stocks requests)))
