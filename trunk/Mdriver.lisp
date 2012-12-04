@@ -9,6 +9,8 @@
 
 (module Mdriver-private
   (include-book "avl-rational-keys" :dir :teachpacks)
+  (include-book "io-utilities" :dir :teachpacks)
+  
   
   ; (isPresent tks sr)
   ; Verifies if the token for the stock record is present in the list of
@@ -58,19 +60,15 @@
                     (getStockValues (cdr flattened_tree) request))
               (getStockValues (cdr flattened_tree) request)))))
   
-  ; (mapData stock requests)
-  ; Maps the stock data to the requests and outputs the information to a
-  ; format that can be written by the output module.
-  ;
-  ; stocks - tree stucture for stock data that is available.
-  ; requests - the requests for data to be pulled from the stock data.
+  
   (defun mapData (stocks requests)
     (if (equal nil (car requests))
         nil
         (let* ((req (car requests))
                (lin (avl-flatten stocks)))
-          (cons (list (getStockValues lin req) (caddr req)) 
-                (mapData stocks (cdr requests))))))
+          (outputStockData (cons (list (getStockValues lin req) (caddr req)) 
+                (mapData stocks (cdr requests)))))))
+  
   
   (export Idriver))
 
