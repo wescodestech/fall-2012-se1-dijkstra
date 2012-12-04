@@ -5,11 +5,10 @@
   Date: December 6th, 2012
   Team Dijkstra
 |#
-;(require "Idriver.lisp")
+(require "Idriver.lisp")
 
-#|(module Mdriver-private |#
+(module Mdriver-private
   (include-book "avl-rational-keys" :dir :teachpacks)
-
   
   ; (isPresent tks sr)
   ; Verifies if the token for the stock record is present in the list of
@@ -43,13 +42,8 @@
             (calcValue tks (cdr srs) (+ total_value (cadar srs)))
             (calcValue tks (cdr srs) total_value))))
         
-  
-  ; (getStockValues flattented_tree request)
-  ; Returns the calculated values of the stock data for
-  ; one specified request 
-  ;
-  ; flattened_tree -  the tree of stock data
-  ; request -  The individual request for a record
+  ; (getStockValues flattened_tree request)
+  ; Acquires stock values from a request
   (defun getStockValues (flattened_tree request)
     (if (equal nil (car flattened_tree))
         nil
@@ -58,30 +52,29 @@
                (stocks (cdr current))
                (sd (car request))
                (ed (cadr request))
-               (tks (cddr request)))
+               (tks (caddr request)))
           (if (and (<= sd date) (>= ed date))
-              (calcValue tks stocks 0)
+              (cons (list date (calcValue tks stocks 0)) 
+                    (getStockValues (cdr flattened_tree) request))
               (getStockValues (cdr flattened_tree) request)))))
   
-    (defun runRequests (flattened_tree request_list)
-    (if (consp (request_list))
-        (cons (getStockValues flattened_tree (car request_list))
-              (runRequests flattened_tree (cdr request_list)))
-        (outputStockData (list (getStockValues flattened_tree (car request_list))))))
-  
+  ; (mapData stock requests)
+  ; Maps the stock data to the requests and outputs the information to a
+  ; format that can be written by the output module.
+  ;
+  ; stocks - tree stucture for stock data that is available.
+  ; requests - the requests for data to be pulled from the stock data.
   (defun mapData (stocks requests)
     (if (equal nil (car requests))
         nil
-        (let* ((req (requests))
+        (let* ((req (car requests))
                (lin (avl-flatten stocks)))
-          (runRequests lin req))))
-        
+          (cons (list (getStockValues lin req) (caddr req)) 
+                (mapData stocks (cdr requests))))))
   
-        
-#|  (export Idriver))
+  (export Idriver))
 
 (link Mdriver
       (import)
       (export Idriver)
       (Mdriver-private))
-|#
