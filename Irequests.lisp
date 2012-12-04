@@ -6,6 +6,3 @@
   Team Dijkstra
 |#
 
-(interface Irequests
-  (sig readRequest (filename state))
-  (sig getRequests ()))

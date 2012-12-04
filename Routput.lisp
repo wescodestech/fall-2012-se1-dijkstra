@@ -14,8 +14,8 @@
   Team Dijkstra
 |#
 ;(require "Mdriver.lisp")
-;(require "Mstocks.lisp")
-;(require "Mrequests.lisp")
+(require "Mstocks.lisp")
+(require "Mrequests.lisp")
 (require "Moutput.lisp")
 (link Routput
       (import)
