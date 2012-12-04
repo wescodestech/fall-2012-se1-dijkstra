@@ -28,10 +28,10 @@
   
   ; (trim string)
   ; Removes all blanks and newline characters in the string
-  (defun trim (str)
-    (let* ((split (packets-set '(#\return #\newline #\tab #\space) 
-                               (str->chrs str))))
-      (chrs->str (concat split))))
+;  (defun trim (str)
+;    (let* ((split (packets-set '(#\return #\newline #\tab #\space) 
+;                               (str->chrs str))))
+;      (chrs->str (concat split))))
   
   ; (extractTKlist xml)
   ; Returns: (TK1 TK2 ... TKn)
@@ -50,9 +50,9 @@
         (let* ((request (extractXMLTag xml "ar"))
                (ar (coerce (car request) 'string))
                (sdxml (extractXMLTag ar "sd"))
-               (sd (coerce (car sdxml) 'string))
+               (sd (str->rat (coerce (car sdxml) 'string)))
                (edxml (extractXMLTag (cdr sdxml) "ed"))
-               (ed (coerce (car edxml) 'string))
+               (ed (str->rat (coerce (car edxml) 'string)))
                (tks (extractTKlist (cdr edxml))))
           (cons (list sd ed tks) (extractRequests (cdr request))))))
   
@@ -61,7 +61,7 @@
   (defun getRequests (file)
     (mv-let (input-text error-open state)
             (file->string file state)
-            (extractRequests (trim input-text))))
+            (extractRequests input-text)))
   
   (export Irequests))
 
