@@ -583,3 +583,264 @@
 	<cp>12.8</cp>
 	<tr>264140</tr>
 </sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100802</td>
+	<hp>14.08</hp>
+	<lp>13.96</lp>
+	<op>14.03</op>
+	<cp>14.0</cp>
+	<tr>141671</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100803</td>
+	<hp>14.07</hp>
+	<lp>13.91</lp>
+	<op>13.96</op>
+	<cp>13.94</cp>
+	<tr>140985</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100804</td>
+	<hp>14.2</hp>
+	<lp>13.92</lp>
+	<op>13.96</op>
+	<cp>14.18</cp>
+	<tr>142983</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100806</td>
+	<hp>14.38</hp>
+	<lp>14.0</lp>
+	<op>14.04</op>
+	<cp>14.34</cp>
+	<tr>133947</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100809</td>
+	<hp>14.52</hp>
+	<lp>14.34</lp>
+	<op>14.37</op>
+	<cp>14.4</cp>
+	<tr>122040</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100810</td>
+	<hp>14.46</hp>
+	<lp>14.2</lp>
+	<op>14.34</op>
+	<cp>14.35</cp>
+	<tr>96579</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100811</td>
+	<hp>14.2</hp>
+	<lp>13.84</lp>
+	<op>14.14</op>
+	<cp>13.87</cp>
+	<tr>132431</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100812</td>
+	<hp>13.99</hp>
+	<lp>13.75</lp>
+	<op>13.75</op>
+	<cp>13.85</cp>
+	<tr>116624</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100813</td>
+	<hp>13.955</hp>
+	<lp>13.76</lp>
+	<op>13.82</op>
+	<cp>13.83</cp>
+	<tr>78455</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100816</td>
+	<hp>13.9</hp>
+	<lp>13.68</lp>
+	<op>13.74</op>
+	<cp>13.79</cp>
+	<tr>114163</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100817</td>
+	<hp>14.0</hp>
+	<lp>13.75</lp>
+	<op>13.82</op>
+	<cp>13.94</cp>
+	<tr>132988</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100819</td>
+	<hp>14.0</hp>
+	<lp>13.8</lp>
+	<op>13.88</op>
+	<cp>13.85</cp>
+	<tr>141006</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20100820</td>
+	<hp>13.95</hp>
+	<lp>13.74</lp>
+	<op>13.83</op>
+	<cp>13.79</cp>
+	<tr>171927</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090827</td>
+	<hp>15.0</hp>
+	<lp>14.71</lp>
+	<op>14.92</op>
+	<cp>14.93</cp>
+	<tr>304109</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090828</td>
+	<hp>15.08</hp>
+	<lp>14.7999</lp>
+	<op>15.0</op>
+	<cp>14.85</cp>
+	<tr>339242</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090831</td>
+	<hp>14.8</hp>
+	<lp>14.56</lp>
+	<op>14.76</op>
+	<cp>14.61</cp>
+	<tr>154204</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090901</td>
+	<hp>14.68</hp>
+	<lp>14.15</lp>
+	<op>14.51</op>
+	<cp>14.18</cp>
+	<tr>306233</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090902</td>
+	<hp>14.33</hp>
+	<lp>13.97</lp>
+	<op>14.1</op>
+	<cp>14.23</cp>
+	<tr>235914</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090903</td>
+	<hp>14.43</hp>
+	<lp>14.1601</lp>
+	<op>14.29</op>
+	<cp>14.28</cp>
+	<tr>146636</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090904</td>
+	<hp>14.64</hp>
+	<lp>14.2307</lp>
+	<op>14.25</op>
+	<cp>14.5</cp>
+	<tr>170038</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090909</td>
+	<hp>14.86</hp>
+	<lp>14.42</lp>
+	<op>14.42</op>
+	<cp>14.78</cp>
+	<tr>190962</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090910</td>
+	<hp>15.63</hp>
+	<lp>15.15</lp>
+	<op>15.27</op>
+	<cp>15.45</cp>
+	<tr>490832</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090911</td>
+	<hp>15.68</hp>
+	<lp>15.41</lp>
+	<op>15.54</op>
+	<cp>15.59</cp>
+	<tr>268625</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090914</td>
+	<hp>15.58</hp>
+	<lp>15.28</lp>
+	<op>15.44</op>
+	<cp>15.57</cp>
+	<tr>194511</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090915</td>
+	<hp>16.49</hp>
+	<lp>15.87</lp>
+	<op>16.0</op>
+	<cp>16.41</cp>
+	<tr>646681</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090916</td>
+	<hp>17.11</hp>
+	<lp>16.52</lp>
+	<op>16.56</op>
+	<cp>16.99</cp>
+	<tr>535947</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090917</td>
+	<hp>17.79</hp>
+	<lp>16.96</lp>
+	<op>17.015</op>
+	<cp>17.5</cp>
+	<tr>620099</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090918</td>
+	<hp>17.7</hp>
+	<lp>16.85</lp>
+	<op>17.67</op>
+	<cp>17.39</cp>
+	<tr>864125</tr>
+</sr>
+<sr>
+	<tk>YHOO</tk>
+	<td>20090921</td>
+	<hp>17.23</hp>
+	<lp>16.96</lp>
+	<op>17.23</op>
+	<cp>17.04</cp>
+	<tr>268268</tr>
+</sr>
