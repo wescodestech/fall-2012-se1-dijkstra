@@ -35,9 +35,9 @@
     (if (occurs-in-tree? (car node) parent)
         (let* ((found (avl-retrieve parent (car node))))
           (avl-insert (avl-delete parent (car node)) (car node)
-            (cons (cadr found) (list (cons (cadr node) (caddr node))))))
+            (append (cdr found) (list (cons (cadr node) (caddr node))))))
         (avl-insert parent (first node) 
-                  (cons (list (cadr node) (caddr node)) nil))))
+                  (list (cons (cadr node) (caddr node))))))
   
   ; (readStockData xml)
   ; This function will read the XML string for sotck record data and 
