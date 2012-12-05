@@ -13,7 +13,7 @@
   ; char list.  The data that occurs after the </TAG> is located, is 
   ; returned as a string unparsed. The return format for this function is 
   ; (parsed_char_array . the_rest_as_string)
-  (defun extractXMLTag (xml tag)
+#|  (defun extractXMLTag (xml tag)
     ; Covert the XML string into a character list
     (let* ((xmlCharacters (coerce xml 'list)))
       ; See if we are working with a tag
@@ -59,7 +59,30 @@
                   ; Ignore the tab/newline
                   (cons (car rec) (cdr rec))
                   (cons (cons (car xmlCharacters) (car rec)) 
-                        (cdr rec))))))))
+                        (cdr rec)))))))) |#
+  (defun extractXMLTag (xml tag)
+    (if (listp xml)
+        (if (equal (car xml) #\<)
+            (if (equal (cadr xml) #\/)
+                (if (equal (list (caddr xml) (cadddr xml)) (coerce tag 'list))
+                    (let* ((therest (cdr (cddddr xml))))
+                      (if (equal nil therest)
+                          (cons nil nil)
+                          (cons nil therest)))
+                    (let* ((rec (extractXMLTag (cdr xml) tag)))
+                      (cons (cons (car xml) (car rec)) (cdr rec))))
+                (let* ((parsed (list (cadr xml) (caddr xml))))
+                  (if (equal parsed (coerce tag 'list))
+                      (extractXMLTag (cddddr xml) tag)
+                      (let* ((rec (extractXMLTag (cdr xml) tag)))
+                        (cons (cons (car xml) (car rec)) (cdr rec))))))
+            (if (endp xml)
+                (cons nil nil)
+                (let* ((rec (extractXMLTag (cdr xml) tag)))
+                  (if (or (equal (car xml) #\Newline) (equal (car xml) #\Tab))
+                      (cons (car rec) (cdr rec))
+                      (cons (cons (car xml) (car rec)) (cdr rec))))))
+            (extractXMLTag (coerce xml 'list) tag)))
   
   ; (populateTree parent child)
   ; This function will insert data into the tree where it can locate a
@@ -92,7 +115,7 @@
     (if (equal nil xml)
         nil
         (let* ((sr (extractXMLTag xml "sr"))
-               (tk (extractXMLTag (coerce (car sr) 'string) "tk"))
+               (tk (extractXMLTag (car sr) "tk"))
                (td (extractXMLTag (cdr tk) "td"))
                (hp (extractXMLTag (cdr td) "hp"))
                (lp (extractXMLTag (cdr hp) "lp"))
@@ -102,7 +125,7 @@
           (populateTree (readStockData (cdr sr)) 
                         (list (str->rat (coerce (car td) 'string)) 
                               (coerce (car tk) 'string) 
-                              (str->rat (coerce (car op) 'string)))))))
+                              (str->rat (coerce (car cp) 'string)))))))
   
   ; (getStockData)
   ; Acquires the stock data in tree formate where TD is the key and 
@@ -113,5 +136,6 @@
   ; notation for parsing purposes.
   (defun getStockData () 
     (mv-let (input-text error-open state)
-            (file->string "short_hist.txt" state)
+            (file->string "hist.txt" state)
             (readStockData input-text)))
+            ;(quick input-text "AA")))
