@@ -31,7 +31,7 @@
   ; total_value - The total value of the stock records that are verified 
   ;       against tks for the target date.
   (defun calcValue (tks srs total_value)
-    (if (or (equal nil (car tks)) (equal nil (car srs)))
+    (if (or (equal nil (car tks)) (equal nil (car srs)) (not (rationalp (cadar srs))))
         total_value
         (if (isPresent tks (caar srs))
             (calcValue tks (cdr srs) (+ total_value (cadar srs)))

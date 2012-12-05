@@ -78,11 +78,19 @@
     )
   )
 
+  ; strip any leading 0 from a string
+  (defun stripZero (str)
+  	(if (equal (car (str->chrs str)) #\0)
+	  (chrs->str (cdr (str->chrs str)))
+	  str
+	)  
+  )
+
   (defun googleDate (date)
     (let* ((yd (break-at-nth 4 (str->chrs date))))
       (let* ((md (break-at-nth 2 (second yd))))
         (let* ((y (car yd)) (m (car md)) (d (second md)))
-          (concatenate 'string "new Date(" (chrs->str y) ", " (chrs->str m) ", " (chrs->str d) ")")
+          (concatenate 'string "new Date(" (stripZero(chrs->str y)) ", " (stripZero(chrs->str m)) ", " (stripZero(chrs->str d)) ")")
         )
       )
     )
@@ -208,7 +216,10 @@
           ;then change values into a list of dates and a list of sums (xs and ys)
           (let* ((dates (firsts values)) (sums (seconds values)) )
             ;get the linear regression data (in JSON form)
-            (writeToFile dates sums tickers (getFileName tickers dates) state)
+            (if (equal (car values) nil) 
+              nil
+              (writeToFile dates sums tickers (getFileName tickers dates) state)
+            )
           )
         )
     )
