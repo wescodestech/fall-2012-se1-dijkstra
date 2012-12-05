@@ -10,7 +10,7 @@
   Team Dijkstra
 |#
 (require "Idriver.lisp")
-(require "MOutput.lisp")
+(require "Moutput.lisp")
 (require "Mrequests.lisp")
 (require "Istocks.lisp")
 
@@ -70,16 +70,22 @@
               (getStockValues (cdr flattened_tree) request)))))
   
   
+  ; (mapData stock requests)
+  ; Maps the stock data to the requests and outputs the information to a
+  ; format that can be written by the output module.
+  ;
+  ; stocks - tree stucture for stock data that is available.
+  ; requests - the requests for data to be pulled from the stock data.
   (defun mapData (stocks requests)
     (if (equal nil (car requests))
         nil
-        (let* ((req requests)
+        (let* ((req (car requests))
                (lin (avl-flatten stocks)))
-          (outputStockData (cons (list (getStockValues lin req) (caddr req)) 
-                (mapData stocks (cdr requests)))))))
+          (cons (list (getStockValues lin req) (caddr req)) 
+                (mapData stocks (cdr requests))))))
   
   (defun RunProgram (RqstFile)
-    (mapData (getStockData) (getRequests RqstFile)))
+    (outputStockData (mapData (getStockData) (getRequests RqstFile))))
   
   
   (export Idriver))
