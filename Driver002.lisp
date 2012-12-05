@@ -59,6 +59,5 @@
         nil
         (let* ((req (car requests))
                (lin (avl-flatten stocks)))
-          (outputStockData (cons (list (getStockValues lin req) (caddr req)) 
-                (mapData stocks (cdr requests)))))))
-  
+          (cons (list (getStockValues lin req) (caddr req)) 
+                (mapData stocks (cdr requests))))))
