@@ -106,8 +106,8 @@
   ; combine three lists of size k into a JSON array of k triples
   (defun JSONcombine (xs ys zs)
     (if (consp (cdr xs)) 
-        (concatenate 'string (concatenate 'string "[" (googleDate (rat->str(car xs) 2)) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (JSONcombine (cdr xs) (cdr ys) (cdr zs))  ) 
-        (concatenate 'string "[" (googleDate (rat->str (car xs) 2)) "," (rat->str (car ys) 2) "," (rat->str (car zs) 2) "]" ) 
+        (concatenate 'string (concatenate 'string "[" (rat->str(car xs) 2) "," (rat->str(car ys) 2) "," (rat->str (car zs) 2) "]" ) "," (JSONcombine (cdr xs) (cdr ys) (cdr zs))  ) 
+        (concatenate 'string "["  (rat->str (car xs) 2) "," (rat->str (car ys) 2) "," (rat->str (car zs) 2) "]" ) 
     )
   )
   
@@ -160,27 +160,31 @@
   (defun getHTML (dates sums tickers)
     (concatenate 'string 
       "<html>
-         <head>
-           <script type='text/javascript' src='http://www.google.com/jsapi'></script>
-           <script type='text/javascript'>
-             google.load('visualization', '1', {'packages':['annotatedtimeline']});
-             google.setOnLoadCallback(drawChart);
-             function drawChart() {
-               var data = new google.visualization.DataTable();
-               data.addColumn('date', 'Date');
-               data.addColumn('number', 'Sum Value');
-               data.addColumn('number', 'Trend Value');
-               data.addRows([" (generateData dates sums) "]);
-               var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
-               chart.draw(data, {displayAnnotations: true});
-             }
-           </script>
-         </head>
-         <body>
-           <h1>Linear Regression Analysis</h1><h2>" (tickerString tickers "<br>") "</h2>
-           <div id='chart_div' style='width: 800px; height: 400px;'></div>
-         </body>
-       </html>"
+  <head>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['corechart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Sum', 'Estimate'],
+          "(generateData dates sums)"
+        ]);
+
+        var options = {
+          title: ''
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Stock Price Analysis:</h1><h2>Ticker Symbols Included:</h2><h3 style='padding-left: 25px;'>" (tickerString tickers "<br>") "</h3>
+    <div id='chart_div' style='width: 900px; height: 500px;'></div>
+  </body>
+</html>"
     )
   )
 
