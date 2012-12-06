@@ -11,6 +11,7 @@
 |#
 
 (interface Idriver
+  (sig isPresent (tks srs))
   (sig calcValue (tks srs total_value))
   (sig getStockValues (flattened_tree request))
   (sig mapData (stocks requests))
